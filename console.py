@@ -116,7 +116,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        kw = {}
         splite_line = [_.strip(",") for _ in split(args)]
         if len(splite_line) == 0:
             print("** class name missing **")
@@ -135,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
             try:
                 value = eval(splite_arg[1])
             except Exception:
-                value = splite_arg[1].replace(' ', '_').replace('"', '')
+                value = splite_arg[1].replace(' ', '_').replace('"', '\\"')
             for key, obj in all_objs.items():
                 if f"{class_name}.{new_instance.id}" == key:
                     setattr(obj, key_name, value)
