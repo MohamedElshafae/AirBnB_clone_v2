@@ -134,7 +134,7 @@ class HBNBCommand(cmd.Cmd):
             try:
                 value = eval(splite_arg[1])
             except Exception:
-                value = splite_arg[1].replace('_', '').replace('"', '').replace('"', '\\"')
+                value = splite_arg[1].replace('_', ' ').strip('"')
             for key, obj in all_objs.items():
                 if f"{class_name}.{new_instance.id}" == key:
                     setattr(obj, key_name, value)
