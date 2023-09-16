@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+from shlex import split
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,14 +116,29 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        kw = {}
+        splite_line = [_.strip(",") for _ in split(args)]
+        if len(splite_line) == 0:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif splite_line[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[splite_line[0]]()
         storage.save()
+        class_name = splite_line[0]
+        del splite_line[0]
+        all_objs = storage.all()
+        for arg in splite_line:
+            splite_arg = arg.split('=')
+            key_name = splite_arg[0]
+            try:
+                value = eval(splite_arg[1])
+            except Exception:
+                value = splite_arg[1].replace(' ', '_').replace('"', '')
+            for key, obj in all_objs.items():
+                if f"{class_name}.{new_instance.id}" == key:
+                    setattr(obj, key_name, value)
         print(new_instance.id)
         storage.save()
 
@@ -319,6 +335,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
