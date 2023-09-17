@@ -137,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
                 value = splite_arg[1].replace('_', ' ').strip('"')
             for key, obj in all_objs.items():
                 if f"{class_name}.{new_instance.id}" == key:
-                    setattr(obj, key_name, value)
+                    make_update(obj, key_name, value)
         print(new_instance.id)
         storage.save()
 
@@ -334,6 +334,16 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
+def make_update(obj, key, value):
+    """set attribute to the object"""
+    from datetime import datetime
+    if key == "id":
+        if value is None:
+            return
+    elif key in ['created_at', 'updated_at']:
+        value = datetime.fromisoformat(value)
+    setattr(obj, key, value)
 
 
 if __name__ == "__main__":
