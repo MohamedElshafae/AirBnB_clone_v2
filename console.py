@@ -139,7 +139,7 @@ class HBNBCommand(cmd.Cmd):
                 if f"{class_name}.{new_instance.id}" == key:
                     make_update(obj, key_name, value)
         print(new_instance.id)
-        storage.save()
+        new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """
