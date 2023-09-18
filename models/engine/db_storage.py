@@ -34,17 +34,12 @@ class DBStorage():
         re_dict = {}
         objs = []
         if cls:
-            objs = self.__session.query(cls).order_by(cls.name)
+            objs = self.__session.query(cls)
         else:
-            cls_list = [State, City]
+            cls_list = [State, City, User, Place]
             for cls in cls_list:
-                objs.extend(self.__session.query(cls).order_by(cls.name)).all()
-            # objs = self.__session.query(User).order_by(User.name)
-            # objs.extend(self.__session.query(State).order_by(State.name))
-            # objs.extend(self.__session.query(City).order_by(City.name))
-            # objs.extend(self.__session.query(Amenity).order_by(Amenity.name))
-            # objs.extend(self.__session.query(Place).order_by(Place.name))
-            # objs.extend(self.__session.query(Review).order_by(Review.name))
+                objs.extend(self.__session.query(cls).all())
+            # may need to be orderd by
 
         for obj in objs:
             unique_key = f"{obj.__class__.__name__}.{obj.id}"

@@ -15,6 +15,7 @@ class State(BaseModel, Base):
         cities = relationship("City", backref="state")
 
     else:
+        name = ""
         @property
         def cities(self):
             """returns the list of City instances"""
