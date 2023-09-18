@@ -114,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args): #to_do: create the instance full first
+    def do_create(self, args):
         """ Create an object of any class"""
         splite_line = [_.strip(",") for _ in split(args)]
         if len(splite_line) == 0:
@@ -138,7 +138,7 @@ class HBNBCommand(cmd.Cmd):
                     value = splite_arg[1].strip('"').replace('_', ' ')
                 kwargs[key_name] = value
             new_instance = HBNBCommand.classes[class_name](**kwargs)
-            storage.new(new_instance)
+            # storage.new(new_instance)
         print(new_instance.id)
         new_instance.save()
 
@@ -170,8 +170,9 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = c_name + "." + c_id
+        all_objs = storage.all(HBNBCommand.classes[c_name])
         try:
-            print(storage._FileStorage__objects[key])
+            print(all_objs[key])
         except KeyError:
             print("** no instance found **")
 
@@ -222,12 +223,12 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            all_objs = storage.all(HBNBCommand.classes[args])
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+            all_objs = storage.all()
+
+        for v in all_objs.values():
+            print_list.append(str(v))
 
         print(print_list)
 
@@ -239,9 +240,18 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-        for k, v in storage._FileStorage__objects.items():
-            if args == k.split('.')[0]:
-                count += 1
+        args = [_.strip(",") for _ in split(args)]
+
+        if args and len(args) > 0:
+            if args[0] in HBNBCommand.classes:
+                all_objs = storage.all(HBNBCommand.classes[args[0]])
+                for obj in all_objs.values():
+                    count += 1
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
+
         print(count)
 
     def help_count(self):
@@ -335,6 +345,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 def make_update(obj, key, value):
     """set attribute to the object"""

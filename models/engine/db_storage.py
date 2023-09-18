@@ -21,10 +21,11 @@ class DBStorage():
     def __init__(self):
         """Setup your engine and connect to database"""
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                       .format(getenv('HBNB_MYSQL_USER'),
-                                               getenv('HBNB_MYSQL_PWD'),
-                                               getenv('HBNB_MYSQL_HOST'),
-                                               getenv('HBNB_MYSQL_DB')))
+                                      .format(getenv('HBNB_MYSQL_USER'),
+                                              getenv('HBNB_MYSQL_PWD'),
+                                              getenv('HBNB_MYSQL_HOST'),
+                                              getenv('HBNB_MYSQL_DB')),
+                                      pool_pre_ping=True)
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
@@ -37,7 +38,7 @@ class DBStorage():
         else:
             cls_list = [State, City]
             for cls in cls_list:
-                objs.extend(self.__session.query(cls).order_by(cls.name))
+                objs.extend(self.__session.query(cls).order_by(cls.name)).all()
             # objs = self.__session.query(User).order_by(User.name)
             # objs.extend(self.__session.query(State).order_by(State.name))
             # objs.extend(self.__session.query(City).order_by(City.name))
@@ -67,6 +68,7 @@ class DBStorage():
         """create all tables in the database and current database session"""
 
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
