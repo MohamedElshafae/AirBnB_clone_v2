@@ -114,7 +114,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
+    def do_create(self, args): #to_do: create the instance full first
         """ Create an object of any class"""
         splite_line = [_.strip(",") for _ in split(args)]
         if len(splite_line) == 0:
@@ -123,21 +123,22 @@ class HBNBCommand(cmd.Cmd):
         elif splite_line[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[splite_line[0]]()
-        storage.save()
-        class_name = splite_line[0]
-        del splite_line[0]
-        all_objs = storage.all()
-        for arg in splite_line:
-            splite_arg = arg.split('=')
-            key_name = splite_arg[0]
-            try:
-                value = eval(splite_arg[1])
-            except Exception:
-                value = splite_arg[1].replace('_', ' ').strip('"')
-            for key, obj in all_objs.items():
-                if f"{class_name}.{new_instance.id}" == key:
-                    make_update(obj, key_name, value)
+        if len(splite_line) == 1:
+            new_instance = HBNBCommand.classes[splite_line[0]]()
+        else:
+            kwargs = {}
+            class_name = splite_line[0]
+            del splite_line[0]
+            for arg in splite_line:
+                splite_arg = arg.split('=')
+                key_name = splite_arg[0]
+                try:
+                    value = eval(splite_arg[1])
+                except Exception:
+                    value = splite_arg[1].strip('"').replace('_', ' ')
+                kwargs[key_name] = value
+            new_instance = HBNBCommand.classes[class_name](**kwargs)
+            storage.new(new_instance)
         print(new_instance.id)
         new_instance.save()
 
