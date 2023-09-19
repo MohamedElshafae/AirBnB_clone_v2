@@ -36,7 +36,7 @@ class DBStorage():
         if cls:
             objs = self.__session.query(cls)
         else:
-            cls_list = [State, City, User, Place]
+            cls_list = [State, City, User, Place, Review, Amenity]
             for cls in cls_list:
                 objs.extend(self.__session.query(cls).all())
             # may need to be orderd by
