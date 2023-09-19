@@ -20,6 +20,7 @@ place_amenity = Table('place_amenity', Base.metadata,
                              ForeignKey('amenities.id'),
                              primary_key=True, nullable=False))
 
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
@@ -38,7 +39,7 @@ class Place(BaseModel, Base):
         reviews = relationship("Review", backref="place")
         amenities = relationship("Amenity",
                                  secondary='place_amenity', viewonly=False,
-                                 backref='places') 
+                                 backref='places')
 
     else:
         city_id = ""
