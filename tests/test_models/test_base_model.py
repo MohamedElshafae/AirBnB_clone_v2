@@ -69,9 +69,6 @@ class test_basemodel(unittest.TestCase):
             del dct['_sa_instance_state']
         except Exception:
             pass
-        print('[{}] ({}) {}'.format(self.name, i.id,
-                         dct))
-        print(str(i))
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
                          dct))
 
