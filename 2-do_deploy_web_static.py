@@ -3,14 +3,13 @@
 Fabric script that generates a .tgz archive from
 the contents of the web_static folder
 """
-from fabric.api import local, task, run, env, put
+from fabric.api import local, run, env, put
 from datetime import datetime
 import os
 env.user = "ubuntu"
 env.hosts = ['54.172.230.228', '54.87.240.48']
 
 
-@task
 def do_pack():
     """pack web_static folder"""
     try:
@@ -23,7 +22,6 @@ def do_pack():
         return None
 
 
-@task
 def do_deploy(archive_path):
     """doc"""
     file = archive_path.split('/')[-1].split('.')[0]
