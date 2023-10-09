@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-#Bash script that sets up your web servers for the deployment of web_static
+# Bash script that sets up your web servers for the deployment of web_static
 sudo apt-get update
-sudo apt install nginx
+sudo apt install -y nginx
 sudo mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
 sudo sh -c 'echo "Hello in this world --__--" > /data/web_static/releases/test/index.html'
-sudo -sf ln /data/web_static/current /data/web_static/releases/test/
+sudo ln -sf /data/web_static/current /data/web_static/releases/test/
 sudo chown -R ubuntu:ubuntu /data/
 sudo sh -c 'echo "
 server {
