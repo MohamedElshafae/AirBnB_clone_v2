@@ -43,3 +43,11 @@ def do_deploy(archive_path):
     /data/web_static/current')
     print('New version deployed!')
     return True
+
+@task
+def deploy():
+    """doc"""
+    archive = do_pack()
+    if not archive:
+        return False
+    return do_deploy(archive)
