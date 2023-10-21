@@ -4,9 +4,9 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", strict_slashes=False)
 def homepage():
-    """doc"""
+    """doc"""~
     return "Hello HBNB!"
 
 
