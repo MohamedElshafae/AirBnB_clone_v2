@@ -29,5 +29,13 @@ def python(text="is cool"):
     return f"Python {text.replace('_', ' ')}"
 
 
+@app.route('/number/<int:n>', strict_slashes=False)
+def number(n):
+    """doc"""
+    if isinstance(n, int):
+        return f'{n} is a number'
+    return None
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
