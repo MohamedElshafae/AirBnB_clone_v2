@@ -65,3 +65,7 @@ class FileStorage:
                     to_del.append(unique_id)
             for one in to_del:
                 del self.__objects[one]
+
+    def close(self):
+        """ method for deserializing the JSON file to objects"""
+        self.reload()
