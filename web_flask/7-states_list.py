@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def remove_sql_session(e):
+def remove_sql_session():
     """remove the current SQLAlchemy Session"""
     storage.close()
 
@@ -19,4 +19,4 @@ def states_list():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
